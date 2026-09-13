@@ -1,6 +1,6 @@
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
-CREATE TYPE IF NOT EXISTS post_type AS ENUM('text', 'multimedia');
-CREATE TYPE IF NOT EXISTS media_type AS ENUM('image', 'video');
+CREATE TYPE post_type AS ENUM ('text', 'multimedia');
+CREATE TYPE media_type AS ENUM ('image', 'video');
 
 
 CREATE TABLE IF NOT EXISTS users (

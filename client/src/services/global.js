@@ -5,14 +5,14 @@ import { getAccessToken } from "./token.service";
 export const userIsLogged = async () => {
   const token = getAccessToken();
   if (token) {
-    const res = await axios.get("/protected/session/logged", {
+    const res = await axios.get("/protected/session", {
       withCredentials: true,
       headers: { Authorization: `Bearer ${token}` },
     });
 
     return res;
   } else {
-    const res = await axios.get("/protected/session/logged");
+    const res = await axios.get("/protected/session");
     return res;
   }
 };

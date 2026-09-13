@@ -1,9 +1,15 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
+import router from "./router.js";
+import errorHandler from "./error/errorHandler.js";
+
+// starting express application
 const app = express();
 
+// middlewares
 app.use(express.json());
 app.use(
   cors({
@@ -13,5 +19,12 @@ app.use(
     exposedHeaders: ["access-token"],
   }),
 );
+app.use(cookieParser());
+
+// routes
+app.use(router);
+
+// error handler
+app.use(errorHandler);
 
 export default app;

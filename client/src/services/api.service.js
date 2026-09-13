@@ -6,7 +6,7 @@ import {
 } from "./token.service";
 
 const api = axios.create({
-  baseURL: `${import.meta.env.VITE_BACKEND_URL}/protected`,
+  baseURL: `${import.meta.env.VITE_SERVER_URL}/protected`,
   withCredentials: true,
 });
 
@@ -48,7 +48,7 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default api;

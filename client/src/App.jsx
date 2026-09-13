@@ -8,7 +8,7 @@ import Display from "./pages/Display";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import { Toaster } from "sonner";
 
-axios.defaults.baseURL = `${import.meta.env.VITE_BACKEND_URL}`;
+axios.defaults.baseURL = `${import.meta.env.VITE_SERVER_URL}`;
 axios.defaults.withCredentials = true;
 
 function App() {
@@ -19,7 +19,7 @@ function App() {
       try {
         const res = await userIsLogged();
 
-        if (res.status != 200) throw new Error(res.response.data.message);
+        if (res.status != 204) throw new Error(res.response.data.message);
         return;
       } catch (error) {
         if (

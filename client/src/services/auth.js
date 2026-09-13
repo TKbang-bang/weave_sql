@@ -1,14 +1,30 @@
 import axios from "axios";
 import api from "./api.service";
 
-export const registerData = async (name, alias, email, password) => {
-  const res = await axios.post("/auth/signup", {
-    name,
-    alias,
+export const registerData = async (
+  firstname,
+  lastname,
+  username,
+  email,
+  password,
+) => {
+  const response = await axios.post("/auth/signup", {
+    firstname,
+    lastname,
+    username,
     email,
     password,
   });
-  return res;
+
+  if (response.status != 201)
+    return {
+      success: false,
+      message:
+        response.data.message || "An error occurred during registration.",
+      about: response.data.about || "unknown",
+    };
+
+  console.log(response.data);
 };
 
 export const codeVerify = async (code) => {

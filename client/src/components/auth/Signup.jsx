@@ -5,14 +5,24 @@ import { useNavigate } from "react-router-dom";
 
 function Signup() {
   const [seePassword, setSeePassword] = useState(false);
+
+  const [firstnameErr, setFirstnameErr] = useState(false);
+  const [lastnameErr, setLastnameErr] = useState(false);
+  const [passwordErr, setPasswordErr] = useState(false);
   const [aliasErr, setAliasErr] = useState(false);
-  const [aliasErrTxt, setAliasErrTxt] = useState("");
   const [emailErr, setEmailErr] = useState(false);
+
+  const [firstnameErrTxt, setFirstnameErrTxt] = useState("");
+  const [lastnameErrTxt, setLastnameErrTxt] = useState("");
+  const [passwordErrTxt, setPasswordErrTxt] = useState("");
+  const [aliasErrTxt, setAliasErrTxt] = useState("");
   const [emailErrTxt, setEmailErrTxt] = useState("");
+
   const [loading, setLoading] = useState(false);
 
-  const [name, setName] = useState("");
-  const [alias, setAlias] = useState("");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -22,29 +32,59 @@ function Signup() {
     e.preventDefault();
 
     setAliasErr(false);
-    setAliasErrTxt("");
     setEmailErr(false);
+    setPasswordErr(false);
+    setFirstnameErr(false);
+    setLastnameErr(false);
+
+    setAliasErrTxt("");
     setEmailErrTxt("");
-    setLoading(true);
+    setPasswordErrTxt("");
+    setFirstnameErrTxt("");
+    setLastnameErrTxt("");
+    // setLoading(true);
 
     try {
-      const res = await registerData(name, alias, email, password);
+      const res = await registerData(
+        firstname,
+        lastname,
+        username,
+        email,
+        password,
+      );
 
-      if (res.status != 201) throw new Error(res);
+      if (!res.success) throw new Error(res.message);
 
-      navigate("/verify");
+      // navigate("/verify");
     } catch (error) {
       setLoading(false);
-      
-      if (error.response.data.about == "email") {
+
+      // console.log(error.response);
+
+      if (error?.response?.data?.about == "email") {
         setEmailErr(true);
         setLoading(false);
         setEmailErrTxt(error.response.data.message);
       }
 
-      if (error.response.data.about == "alias") {
+      if (error?.response?.data?.about == "username") {
         setAliasErr(true);
         setAliasErrTxt(error.response.data.message);
+      }
+
+      if (error?.response?.data?.about == "firstname") {
+        setFirstnameErr(true);
+        setFirstnameErrTxt(error.response.data.message);
+      }
+
+      if (error?.response?.data?.about == "lastname") {
+        setLastnameErr(true);
+        setLastnameErrTxt(error.response.data.message);
+      }
+
+      if (error?.response?.data?.about == "password") {
+        setPasswordErr(true);
+        setPasswordErrTxt(error.response.data.message);
       }
     }
   };
@@ -55,27 +95,52 @@ function Signup() {
 
       <article className="name_field">
         <div className="name_container">
-          <label>Name</label>
+          <label>First Name</label>
           <input
             type="text"
             placeholder=" "
             maxLength={40}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={firstname}
+            onChange={(e) =>
+              setFirstname(
+                e.target.value.charAt(0).toUpperCase() +
+                  e.target.value.slice(1),
+              )
+            }
             required
           />
         </div>
+        {firstnameErr && <p className="error">*{firstnameErrTxt}</p>}
+      </article>
+      <article className="name_field">
+        <div className="name_container">
+          <label>Last Name</label>
+          <input
+            type="text"
+            placeholder=" "
+            maxLength={40}
+            value={lastname}
+            onChange={(e) =>
+              setLastname(
+                e.target.value.charAt(0).toUpperCase() +
+                  e.target.value.slice(1),
+              )
+            }
+            required
+          />
+        </div>
+        {lastnameErr && <p className="error">*{lastnameErrTxt}</p>}
       </article>
 
       <article className="alias_field">
         <div className="alias_container">
-          <label>Alias</label>
+          <label>Username</label>
           <input
             type="text"
             placeholder=" "
-            value={alias}
+            value={username}
             onKeyDown={(e) => e.key === " " && e.preventDefault()}
-            onChange={(e) => setAlias(e.target.value)}
+            onChange={(e) => setUsername(e.target.value)}
             maxLength={15}
             required
           />
@@ -119,6 +184,7 @@ function Signup() {
             </span>
           )}
         </div>
+        {passwordErr && <p className="error">*{passwordErrTxt}</p>}
       </article>
 
       {loading ? (
