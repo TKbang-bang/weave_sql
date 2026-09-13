@@ -76,7 +76,7 @@ npm run dev
 <p>Create a <code>.env</code> file in the <strong>client/</strong> folder:</p>
 <pre>
 # URL of the backend API
-VITE_BACKEND_URL=your_backend_url
+VITE_SERVER_URL=your_server_url
 </pre>
 
 <h3>3. Set up the server</h3>
@@ -112,7 +112,6 @@ DB_PASSWORD=your_db_password
 DB_PORT=5432
 DB_HOST=your_database_host default(localhost)
 DB_NAME=your_database_name
-DB_DIALECT=postgres
 
 </pre>
 
