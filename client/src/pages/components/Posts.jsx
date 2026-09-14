@@ -6,14 +6,14 @@ import Post from "./Post";
 import { CloseIcon, SendIcon } from "../../components/svg";
 import { gettingPosts, gettingComments } from "../../services/posts.service";
 import { getAccessToken, verifyToken } from "../../services/token.service";
-import { SocketContext } from "../Display";
+import { IoContext } from "../../context/socket.context";
 
 function Posts({ to }) {
   const [posts, setPosts] = useState([]);
   const [post_id, setPostId] = useState("");
   const [allComments, setAllComments] = useState([]);
   const [commentValue, setCommentValue] = useState("");
-  const socket = useContext(SocketContext);
+  const socket = useContext(IoContext);
 
   useEffect(() => {
     const getPostst = async () => {
@@ -48,19 +48,20 @@ function Posts({ to }) {
       );
     };
 
-    socket.on("server_comment", newComment);
+    socket?.on("server_comment", newComment);
 
     const serverError = ({ message }) => {
       toast.error(message);
     };
 
-    socket.on("server_error", serverError);
+    socket?.on("server_error", serverError);
 
     return () => {
-      socket.off("server_comment", newComment);
-      socket.off("server_error", serverError);
+      socket?.off("server_comment", newComment);
+      socket?.off("server_error", serverError);
     };
   }, [socket]);
+
   const handleCommenting = async (e) => {
     e.preventDefault();
 
