@@ -27,6 +27,13 @@ export const signupMiddleware = async (req, res, next) => {
 };
 
 const nameValidation = (firstname, lastname, username) => {
+  if (!firstname)
+    throw new ServerError("Firtsname cannot be empty", "firstname", 400);
+  if (!lastname)
+    throw new ServerError("Lastname cannot be empty", "lastname", 400);
+  if (!username)
+    throw new ServerError("Username cannot be empty", "username", 400);
+
   // check if firstname, lastname, and username contain only letters
   const nameRegex = /^[a-zA-Z]+$/;
   if (!nameRegex.test(firstname)) {
@@ -40,13 +47,6 @@ const nameValidation = (firstname, lastname, username) => {
     throw new ServerError(
       "Lastname should contain only letters",
       "lastname",
-      400,
-    );
-  }
-  if (!nameRegex.test(username)) {
-    throw new ServerError(
-      "Username should contain only letters",
-      "username",
       400,
     );
   }
@@ -82,6 +82,8 @@ const nameValidation = (firstname, lastname, username) => {
 };
 
 const emailValidation = (email) => {
+  if (!email) throw new ServerError("Email cannot be empty", "email", 401);
+
   // check if email is valid
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
@@ -92,6 +94,9 @@ const emailValidation = (email) => {
 };
 
 const passwordValidation = (password) => {
+  if (!password)
+    throw new ServerError("Password cannot be empty", "password", 400);
+
   // check the password length
   if (password.length < 8 || password.length > 30) {
     throw new ServerError(

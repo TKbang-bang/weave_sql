@@ -67,3 +67,7 @@ export const signinController = async (req, res, next) => {
     next(error);
   }
 };
+
+export const isUserLogged = (req, res, next) => {
+  res.status(201).json({ message: "Be a good user" });
+};

@@ -1,11 +1,10 @@
 import axios from "axios";
-import api from "./api.service";
 import { getAccessToken, setAccessToken } from "./token.service";
 
 export const isUserLogged = async () => {
   const token = getAccessToken();
 
-  const response = await axios.get("/protected/session", {
+  const response = await axios.get("/auth/session", {
     withCredentials: true,
     headers: { Authorization: token ? `Bearer ${token}` : null },
   });
