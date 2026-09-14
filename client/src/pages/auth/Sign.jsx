@@ -12,7 +12,7 @@ function Sign() {
       try {
         const res = await isUserLogged();
 
-        if (res.status == 200) return navigate("/");
+        if (res.success) return navigate("/");
       } catch (error) {
         return;
       }

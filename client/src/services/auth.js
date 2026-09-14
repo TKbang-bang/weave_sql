@@ -52,8 +52,17 @@ export const codeVerify = async (code) => {
 };
 
 export const loginData = async (email, password) => {
-  const res = await axios.post("/auth/login", { email, password });
-  return res;
+  const response = await axios.post("/auth/signin", { email, password });
+  if (response.status != 201)
+    return {
+      success: false,
+      about: response.data.about,
+      message: response.data.message,
+    };
+
+  setAccessToken(response.headers["access-token"]);
+
+  return { success: true, message: response.data.message };
 };
 
 export const loginOut = async () => {

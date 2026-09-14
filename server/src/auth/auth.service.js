@@ -14,12 +14,12 @@ export const signupService = async (
   email,
   password,
 ) => {
-  // check if the user email is already in use
+  // verify if the user email is already in use
   const existingUser = await getUserByEmail(email);
   if (existingUser)
     throw new ServerError("Email is already in use", "email", 400);
 
-  // check if the user username is already in use
+  // verify if the user username is already in use
   const existingUsername = await getUserByUsername(username);
   if (existingUsername)
     throw new ServerError("Username is already in use", "username", 400);
@@ -42,13 +42,13 @@ export const signupService = async (
 };
 
 export const signupVerifyService = async (req, codeSent) => {
-  // check if the token is still available
+  // verify if the token is still available
   const payload = jwt.verify(req.cookies.code, process.env.CODE_TOKEN_SECRET);
   if (!payload) throw new ServerError("Code nay expired", "code", 409);
 
   const { firstname, lastname, username, email, password, code } = payload;
 
-  // check if the code sent is the correct one
+  // verify if the code sent is the correct one
   if (codeSent != code)
     throw new ServerError("Incorrect verification code", "code", 409);
 
@@ -65,4 +65,17 @@ export const signupVerifyService = async (req, codeSent) => {
   );
 
   return rows[0].id;
+};
+
+export const signinService = async (email, password) => {
+  // verify if the user email is in db
+  const user = await getUserByEmail(email);
+  if (!user) throw new ServerError("User not found", "email", 404);
+
+  // verify if the password is correct
+  const isPasswordCorrect = await bcrypt.compare(password, user.password);
+  if (!isPasswordCorrect)
+    throw new ServerError("Incorrect password", "password", 409);
+
+  return user.id;
 };

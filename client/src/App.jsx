@@ -19,7 +19,7 @@ function App() {
       try {
         const res = await isUserLogged();
 
-        if (res.status != 204) throw new Error(res.response.data.message);
+        if (!res.success) throw new Error(res.response.data.message);
         return;
       } catch (error) {
         if (

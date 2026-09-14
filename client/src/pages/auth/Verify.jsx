@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { codeVerify } from "../../services/auth.js";
-import { setAccessToken } from "../../services/token.service.js";
 import { isUserLogged } from "../../services/global.js";
 
 function Verify() {
@@ -15,7 +14,7 @@ function Verify() {
       try {
         const res = await isUserLogged();
 
-        if (res.status == 200) return navigate("/");
+        if (res.success) return navigate("/");
       } catch (error) {
         return;
       }
@@ -41,7 +40,9 @@ function Verify() {
 
         if (!res.success) throw new Error(res.data.message);
 
-        navigate("/");
+        // navigate("/");
+        window.location = "/";
+        return;
       } catch (error) {
         setCodeErr(true);
         setCodeErrortxt(error.response.data.message);
