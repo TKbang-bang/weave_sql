@@ -1,5 +1,6 @@
 import axios from "axios";
 import api from "./api.service";
+import { setAccessToken } from "./token.service";
 
 export const registerData = async (
   firstname,
@@ -24,12 +25,30 @@ export const registerData = async (
       about: response.data.about || "unknown",
     };
 
-  console.log(response.data);
+  return {
+    success: true,
+    message: response.data.message || "Registration successful.",
+  };
 };
 
 export const codeVerify = async (code) => {
-  const res = await axios.post("/auth/verify", { code });
-  return res;
+  const response = await axios.post("/auth/verify", { code });
+  if (response.status != 201)
+    return {
+      success: false,
+      message: response.data.message,
+      about: response.data.about,
+    };
+
+  const accessToken = response.headers["access-token"];
+  console.log({ accessToken });
+
+  setAccessToken(accessToken);
+
+  return {
+    success: true,
+    message: response.data.message,
+  };
 };
 
 export const loginData = async (email, password) => {

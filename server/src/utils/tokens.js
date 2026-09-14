@@ -11,3 +11,9 @@ export const createRefreshToken = (userID) => {
     expiresIn: "30d",
   });
 };
+
+export const codeToken = (data) => {
+  return jwt.sign(data, process.env.CODE_TOKEN_SECRET, {
+    expiresIn: "5m",
+  });
+};

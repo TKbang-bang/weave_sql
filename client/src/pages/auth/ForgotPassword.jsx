@@ -3,7 +3,7 @@ import { Eye, EyeSplash } from "../../components/svg";
 import { toast } from "sonner";
 import { changePassCode, forgotPassword } from "../../services/auth";
 import { useNavigate } from "react-router-dom";
-import { userIsLogged } from "../../services/global";
+import { isUserLogged } from "../../services/global";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -17,7 +17,7 @@ function ForgotPassword() {
   useEffect(() => {
     const verifyingUser = async () => {
       try {
-        const res = await userIsLogged();
+        const res = await isUserLogged();
 
         if (res.status == 200) return navigate("/");
       } catch (error) {

@@ -3,7 +3,7 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Sign from "./pages/auth/Sign";
 import Verify from "./pages/auth/Verify";
-import { userIsLogged } from "./services/global";
+import { isUserLogged } from "./services/global";
 import Display from "./pages/Display";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import { Toaster } from "sonner";
@@ -17,7 +17,7 @@ function App() {
   useEffect(() => {
     const verifyingUser = async () => {
       try {
-        const res = await userIsLogged();
+        const res = await isUserLogged();
 
         if (res.status != 204) throw new Error(res.response.data.message);
         return;

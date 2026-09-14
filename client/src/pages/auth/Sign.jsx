@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Login from "../../components/auth/Login";
 import Signup from "../../components/auth/Signup";
-import { userIsLogged } from "../../services/global";
+import { isUserLogged } from "../../services/global";
 import { useNavigate } from "react-router-dom";
 
 function Sign() {
@@ -10,7 +10,7 @@ function Sign() {
   useEffect(() => {
     const verifyingUser = async () => {
       try {
-        const res = await userIsLogged();
+        const res = await isUserLogged();
 
         if (res.status == 200) return navigate("/");
       } catch (error) {

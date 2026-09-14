@@ -42,7 +42,7 @@ function Signup() {
     setPasswordErrTxt("");
     setFirstnameErrTxt("");
     setLastnameErrTxt("");
-    // setLoading(true);
+    setLoading(true);
 
     try {
       const res = await registerData(
@@ -55,7 +55,7 @@ function Signup() {
 
       if (!res.success) throw new Error(res.message);
 
-      // navigate("/verify");
+      navigate("/verify");
     } catch (error) {
       setLoading(false);
 

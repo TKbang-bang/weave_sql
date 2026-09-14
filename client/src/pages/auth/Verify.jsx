@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { codeVerify } from "../../services/auth.js";
 import { setAccessToken } from "../../services/token.service.js";
-import { userIsLogged } from "../../services/global.js";
+import { isUserLogged } from "../../services/global.js";
 
 function Verify() {
   const [codeErr, setCodeErr] = useState(false);
@@ -13,7 +13,7 @@ function Verify() {
   useEffect(() => {
     const verifyingUser = async () => {
       try {
-        const res = await userIsLogged();
+        const res = await isUserLogged();
 
         if (res.status == 200) return navigate("/");
       } catch (error) {
@@ -39,9 +39,8 @@ function Verify() {
 
         const res = await codeVerify(code);
 
-        if (res.status !== 200) throw new Error(res.data.message);
+        if (!res.success) throw new Error(res.data.message);
 
-        setAccessToken(res.data.accessToken);
         navigate("/");
       } catch (error) {
         setCodeErr(true);
