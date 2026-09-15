@@ -5,22 +5,25 @@ import { postingPost } from "../../services/posts.service";
 
 function Publicate() {
   const [file, setFile] = useState(null);
-  const [title, setTitle] = useState("");
-  const [type, setType] = useState("");
+  const [content, setContent] = useState("");
+  const [type, setType] = useState("text");
+  const [mediaType, setMediaType] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!file && !content) return
+
     try {
-      const res = await postingPost({ file, title, type });
+      const res = await postingPost({ file, content, type, mediaType });
+      if (!res.success) throw new Error(res.message);
 
-      if (!res.data.ok) throw new Error(res);
+      toast.success(res.message);
 
-      toast.success(res.data.message);
-
-      setTitle("");
       setFile(null);
+      setContent("");
       setType("");
+      setMediaType("");
 
       document.getElementById("images_input").value = "";
       document.getElementById("videos_input").value = "";
@@ -32,22 +35,30 @@ function Publicate() {
   const handleChangeImage = (e) => {
     if (e.target.files.length) {
       setFile(e.target.files[0]);
-      setType("image");
+      setType("multimedia");
+      setMediaType("image");
     }
   };
 
   const handleChangeVideo = (e) => {
     if (e.target.files.length) {
       setFile(e.target.files[0]);
-      setType("video");
+      setType("multimedia");
+      setMediaType("video");
     }
   };
 
   const handleDelete = () => {
     setFile(null);
-    setType("");
+    setType("text");
+    setMediaType(null);
     document.getElementById("images_input").value = "";
     document.getElementById("videos_input").value = "";
+  };
+
+  const handleInput = (e) => {
+    e.target.style.height = "auto";
+    e.target.style.height = `${Math.min(e.target.scrollHeight, 300)}px`;
   };
 
   return (
@@ -55,13 +66,21 @@ function Publicate() {
       <form onSubmit={handleSubmit}>
         <h1>Publicate</h1>
 
-        <input
+        {/* <input
           type="text"
           placeholder="Write something..."
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           maxLength={100}
-        />
+        /> */}
+
+        <textarea
+          placeholder="Write something..."
+          maxLength={1000}
+          value={content}
+          onInput={handleInput}
+          onChange={(e) => setContent(e.target.value)}
+        ></textarea>
 
         <div className="file_container">
           {file && (
@@ -88,19 +107,25 @@ function Publicate() {
             accept="video/*"
             onChange={handleChangeVideo}
           />
-          <label htmlFor="images_input">
+          <label htmlFor="images_input" className="img">
             <Image />
           </label>
-          <label htmlFor="videos_input">
+          <label htmlFor="videos_input" className="video">
             <Video />
           </label>
+
+          {file && (
+            <span onClick={handleDelete} className="del">
+              <Trash />
+            </span>
+          )}
         </div>
 
-        {file && (
+        {/* {file && (
           <span onClick={handleDelete} className="del">
             Delete File <Trash />
           </span>
-        )}
+        )} */}
 
         <button type="submit" className="btn">
           Publicate

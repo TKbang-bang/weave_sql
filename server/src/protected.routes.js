@@ -1,9 +1,9 @@
 import { Router } from "express";
 
+import postsRoutes from "./posts/posts.routes.js";
+
 const protectedRouter = Router();
 
-// protectedRouter.get("/session", (req, res, next) => {
-//   res.status(201).json({ message: "Be a good user" });
-// });
+protectedRouter.use("/posts", postsRoutes);
 
 export default protectedRouter;

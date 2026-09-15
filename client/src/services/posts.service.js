@@ -5,14 +5,22 @@ export const gettingPosts = async ({ link }) => {
   return res;
 };
 
-export const postingPost = async ({ file, title, type }) => {
+export const postingPost = async ({ file, content, type, mediaType }) => {
   const formData = new FormData();
-  formData.append("file", file);
-  formData.append("title", title);
+  formData.append("content", content);
   formData.append("type", type);
+  formData.append("mediaType", mediaType);
+  formData.append("file", file);
 
-  const res = await api.post("/posts", formData);
-  return res;
+  const response = await api.post("/posts", formData);
+
+  if (response.status != 201)
+    return {
+      success: false,
+      message: response.data.message,
+    };
+
+  return { success: true, message: response.data.message };
 };
 
 export const gettingComments = async (id) => {

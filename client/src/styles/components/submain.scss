@@ -19,15 +19,8 @@
       padding-block: 10px;
     }
 
-    &::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: $secondary;
-      border-radius: 5px;
-      border: 2px solid transparent;
-    }
+    scrollbar-width: thin;
+    scrollbar-color: rgba($primary, 0.2) transparent;
 
     &.saved_posts {
       width: 100%;
