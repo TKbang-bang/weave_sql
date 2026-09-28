@@ -1,8 +1,15 @@
 import api from "./api.service";
 
 export const gettingPosts = async ({ link }) => {
-  const res = await api.get(`${link}`);
-  return res;
+  const response = await api.get(`${link}`);
+
+  if (response.status != 200)
+    return {
+      success: false,
+      message: response.data.message,
+    };
+
+  return { success: true, posts: response.data.posts };
 };
 
 export const postingPost = async ({ file, content, type, mediaType }) => {

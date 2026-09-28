@@ -8,6 +8,7 @@ const postsRoutes = Router();
 
 postsRoutes.post("/", upload.single("file"), processImage, postsController);
 postsRoutes.get("/", getPostsController);
+
 // postsRoutes.get("/:postId/comments", gettingComments);
 // // postsRoutes.get("/post/:post_id", getPostsById);
 // postsRoutes.get("/me", gettingMyUserPosts);

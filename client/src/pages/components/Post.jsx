@@ -16,17 +16,16 @@ import {
   savingPost,
 } from "../../services/activities.service";
 import { deletePost } from "../../services/posts.service";
+import VideoPlayer from "./VideoPlayer";
 
 function Post({ post, post_id, del }) {
   const [edit, setEdit] = useState(false);
-  const [editValue, setEditValue] = useState(post.title);
-  const [liked, setLiked] = useState(post.liked == 1 ? true : false);
+  const [editValue, setEditValue] = useState(post.content);
+  const [liked, setLiked] = useState(post.liked);
   const [likes, setLikes] = useState(post.likes);
   const [showOptions, setShowOptions] = useState(false);
-  const [following, setFollowing] = useState(
-    post.owner.following == 1 ? true : false
-  );
-  const [saved, setSaved] = useState(post.saved == 1 ? true : false);
+  const [following, setFollowing] = useState(post.owner.isFollowing);
+  const [saved, setSaved] = useState(post.saved);
 
   const handleEdit = async (e) => {
     e.preventDefault();
@@ -130,14 +129,14 @@ function Post({ post, post_id, del }) {
     <article className="post">
       <div className="post_header">
         <Link
-          to={post.me ? "/myprofile" : `/profile/${post.owner.id}`}
+          to={post.owner.isMe ? "/myprofile" : `/profile/${post.owner.id}`}
           className="post_profile"
         >
           <img
             src={
-              post.owner.profile
-                ? `${import.meta.env.VITE_BACKEND_URL}/uploads/${
-                    post.owner.profile
+              post.owner.avatar
+                ? `${import.meta.env.VITE_SERVER_URL}/images/${
+                    post.owner.avatar
                   }`
                 : `/no_user.png`
             }
@@ -147,15 +146,15 @@ function Post({ post, post_id, del }) {
 
         <div className="post_info">
           <Link
-            to={post.me ? "/myprofile" : `/profile/${post.owner.id}`}
+            to={post.owner.isMe ? "/myprofile" : `/profile/${post.owner.id}`}
             className="name"
           >
-            {post.owner.name}
+            {post.owner.firstname} {post.owner.lastname}
           </Link>
           <p className="date">{post.since_date}</p>
         </div>
 
-        {post.me ? (
+        {post.owner.isMe ? (
           <>
             {!edit && (
               <div
@@ -220,7 +219,7 @@ function Post({ post, post_id, del }) {
                 className="cancel"
                 onClick={() => (
                   setEdit(false),
-                  setEditValue(post.title),
+                  setEditValue(post.content),
                   setShowOptions(false)
                 )}
               >
@@ -232,20 +231,21 @@ function Post({ post, post_id, del }) {
       )}
 
       <div className="post_content">
-        {!edit && <p className="post_title">{post.title}</p>}
-        {post.media_type === "image" ? (
-          <img
-            className="file"
-            src={`${import.meta.env.VITE_BACKEND_URL}/uploads/${post.media}`}
-            alt=""
-            loading="lazy"
-          />
-        ) : (
-          <video controls className="file" loading="lazy">
-            <source
-              src={`${import.meta.env.VITE_BACKEND_URL}/uploads/${post.media}`}
-            />
-          </video>
+        {!edit && <p className="post_title">{post.content}</p>}
+
+        {post.type == "multimedia" && (
+          <>
+            {post.media.type === "image" && (
+              <img
+                className="file"
+                src={`${import.meta.env.VITE_SERVER_URL}/images/${post.media.url}`}
+                alt=""
+                loading="lazy"
+              />
+            )}
+
+            {post.media.type == "video" && <VideoPlayer id={post.media.id} />}
+          </>
         )}
       </div>
 

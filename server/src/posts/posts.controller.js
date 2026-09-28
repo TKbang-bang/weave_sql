@@ -1,13 +1,10 @@
 import { unlink } from "fs/promises";
-import path from "path";
-import { fileURLToPath } from "url";
 
-import { postService } from "./posts.service.js";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-export const getPostsController = async (req, res, next) => {};
+import {
+  getPostService,
+  postService,
+  postVideoService,
+} from "./posts.service.js";
 
 export const postsController = async (req, res, next) => {
   try {
@@ -22,6 +19,28 @@ export const postsController = async (req, res, next) => {
   } catch (error) {
     req.file && (await unlink(`${req.file.path}`));
 
-    return next(error);
+    next(error);
+  }
+};
+
+export const getPostsController = async (req, res, next) => {
+  try {
+    const { userID } = req;
+
+    const posts = await getPostService(userID);
+
+    res.status(200).json({ posts });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const postVideoController = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    await postVideoService(Number(id), res, req);
+  } catch (error) {
+    next(error);
   }
 };

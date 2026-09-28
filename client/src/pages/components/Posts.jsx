@@ -20,9 +20,9 @@ function Posts({ to }) {
       try {
         const res = await gettingPosts({ link: to });
 
-        if (res.status != 200) throw new Error(res);
+        if (!res.success) throw new Error(res.message);
 
-        setPosts(res.data);
+        setPosts(res.posts);
       } catch (error) {
         return toast.error(error.response.data.message);
       }
@@ -43,8 +43,8 @@ function Posts({ to }) {
         prev.map((post) =>
           parseInt(post.id) == parseInt(data.postId)
             ? { ...post, comments: parseInt(post.comments) + 1 }
-            : post
-        )
+            : post,
+        ),
       );
     };
 
